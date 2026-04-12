@@ -1,0 +1,18 @@
+{
+	"node": "n8n-nodes-caldav-interface",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Productivity", "Development"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://github.com/joshlucpoll/n8n-nodes-caldav-interface#credentials"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://github.com/joshlucpoll/n8n-nodes-caldav-interface#readme"
+			}
+		]
+	}
+}
