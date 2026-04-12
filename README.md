@@ -10,11 +10,11 @@ Install the package from the n8n community nodes UI or with npm in a self-hosted
 npm install n8n-nodes-caldav-interface
 ```
 
-Then restart n8n and add the `CalDAV` node to a workflow.
+Then restart n8n and add the `CalDAV Interface` node to a workflow.
 
 ## Operations
 
-The `CalDAV` node is programmatic and supports these resources and operations:
+The `CalDAV Interface` node is programmatic and supports these resources and operations:
 
 - `Calendar`
   - `List`
@@ -73,7 +73,7 @@ Recommended agent flow:
 
 ### Manual workflow
 
-1. Add `CalDAV`.
+1. Add `CalDAV Interface`.
 2. Select `Event -> Create`.
 3. Pick a calendar.
 4. Set `Title`, `When`, and optional `Location`.
@@ -82,7 +82,7 @@ Recommended agent flow:
 ### AI scheduling workflow
 
 1. Use an AI Agent node.
-2. Add `CalDAV` as a tool.
+2. Add `CalDAV Interface` as a tool.
 3. Prompt with instructions like:
 
 ```text

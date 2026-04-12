@@ -212,50 +212,49 @@ const calendarLocatorProperty: INodeProperties = {
 
 const sharedRangeFields: INodeProperties[] = [
 	{
-		displayName: 'Time Range',
+		displayName: 'Range Start',
+		name: 'rangeStart',
+		type: 'dateTime',
+		default: '',
+		description:
+			'Start of the date range to search. Leave blank and use Natural Language Range if you prefer relative dates such as tomorrow or next week.',
+		displayOptions: {
+			show: {
+				resource: ['event', 'query'],
+				operation: ['get', 'filter', 'freeBusy'],
+			},
+			hide: {
+				resource: ['event'],
+				eventGetMode: ['single'],
+			},
+		},
+	},
+	{
+		displayName: 'Range End',
+		name: 'rangeEnd',
+		type: 'dateTime',
+		default: '',
+		description:
+			'End of the date range to search. Leave blank only when Natural Language Range already defines both bounds.',
+		displayOptions: {
+			show: {
+				resource: ['event', 'query'],
+				operation: ['get', 'filter', 'freeBusy'],
+			},
+			hide: {
+				resource: ['event'],
+				eventGetMode: ['single'],
+			},
+		},
+	},
+	{
+		displayName: 'Natural Language Range',
 		name: 'rangeText',
 		type: 'string',
 		default: '',
 		placeholder: 'Friday afternoon',
-		description: '@agentic Natural language window to search, such as tomorrow, Friday afternoon, next week, or 2026-04-15 09:00 to 2026-04-15 17:00',
-		displayOptions: {
-			show: {
-				resource: ['event', 'query'],
-				operation: ['get', 'filter', 'freeBusy'],
-			},
-			hide: {
-				resource: ['event'],
-				eventGetMode: ['single'],
-			},
-		},
-	},
-	{
-		displayName: 'Start',
-		name: 'rangeStart',
-		type: 'string',
-		default: '',
-		placeholder: '2026-04-15 09:00',
 		description:
-			'@agentic Optional explicit range start. Use this when you want precise control instead of a natural language Time Range value.',
-		displayOptions: {
-			show: {
-				resource: ['event', 'query'],
-				operation: ['get', 'filter', 'freeBusy'],
-			},
-			hide: {
-				resource: ['event'],
-				eventGetMode: ['single'],
-			},
-		},
-	},
-	{
-		displayName: 'End',
-		name: 'rangeEnd',
-		type: 'string',
-		default: '',
-		placeholder: '2026-04-15 17:00',
-		description:
-			'@agentic Optional explicit range end. If omitted, the node derives an end time from the natural language range or a default event window.',
+			'@agentic Optional natural language window to search, such as tomorrow, Friday afternoon, next week, or 2026-04-15 09:00 to 2026-04-15 17:00',
 		displayOptions: {
 			show: {
 				resource: ['event', 'query'],
@@ -803,7 +802,7 @@ function mapEventResult(event: Awaited<ReturnType<typeof getEvent>>, action: str
 
 export class CalDav implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'CalDAV',
+		displayName: 'CalDAV Interface',
 		name: 'calDav',
 		icon: { light: 'file:caldav.svg', dark: 'file:caldav.dark.svg' },
 		group: ['output'],
@@ -811,7 +810,7 @@ export class CalDav implements INodeType {
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Manage calendars and events on CalDAV servers',
 		defaults: {
-			name: 'CalDAV',
+			name: 'CalDAV Interface',
 		},
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],
