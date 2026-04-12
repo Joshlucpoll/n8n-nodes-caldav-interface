@@ -210,7 +210,8 @@ const calendarLocatorProperty: INodeProperties = {
 	],
 };
 
-const sharedRangeFields: INodeProperties[] = [
+function createRangeFields(displayOptions: INodeProperties['displayOptions']): INodeProperties[] {
+	return [
 	{
 		displayName: 'Range Start',
 		name: 'rangeStart',
@@ -218,16 +219,7 @@ const sharedRangeFields: INodeProperties[] = [
 		default: '',
 		description:
 			'Start of the date range to search. Leave blank and use Natural Language Range if you prefer relative dates such as tomorrow or next week.',
-		displayOptions: {
-			show: {
-				resource: ['event', 'query'],
-				operation: ['get', 'filter', 'freeBusy'],
-			},
-			hide: {
-				resource: ['event'],
-				eventGetMode: ['single'],
-			},
-		},
+		displayOptions,
 	},
 	{
 		displayName: 'Range End',
@@ -236,16 +228,7 @@ const sharedRangeFields: INodeProperties[] = [
 		default: '',
 		description:
 			'End of the date range to search. Leave blank only when Natural Language Range already defines both bounds.',
-		displayOptions: {
-			show: {
-				resource: ['event', 'query'],
-				operation: ['get', 'filter', 'freeBusy'],
-			},
-			hide: {
-				resource: ['event'],
-				eventGetMode: ['single'],
-			},
-		},
+		displayOptions,
 	},
 	{
 		displayName: 'Natural Language Range',
@@ -255,16 +238,7 @@ const sharedRangeFields: INodeProperties[] = [
 		placeholder: 'Friday afternoon',
 		description:
 			'@agentic Optional natural language window to search, such as tomorrow, Friday afternoon, next week, or 2026-04-15 09:00 to 2026-04-15 17:00',
-		displayOptions: {
-			show: {
-				resource: ['event', 'query'],
-				operation: ['get', 'filter', 'freeBusy'],
-			},
-			hide: {
-				resource: ['event'],
-				eventGetMode: ['single'],
-			},
-		},
+		displayOptions,
 	},
 	{
 		displayName: 'Expand Recurrence',
@@ -272,18 +246,25 @@ const sharedRangeFields: INodeProperties[] = [
 		type: 'boolean',
 		default: true,
 		description: 'Whether to expand recurring events into individual occurrences inside the requested range when the CalDAV server supports it',
-		displayOptions: {
-			show: {
-				resource: ['event', 'query'],
-				operation: ['get', 'filter', 'freeBusy'],
-			},
-			hide: {
-				resource: ['event'],
-				eventGetMode: ['single'],
-			},
-		},
+		displayOptions,
 	},
 ];
+}
+
+const eventDateRangeFields = createRangeFields({
+	show: {
+		resource: ['event'],
+		operation: ['get'],
+		eventGetMode: ['dateRange'],
+	},
+});
+
+const queryRangeFields = createRangeFields({
+	show: {
+		resource: ['query'],
+		operation: ['filter', 'freeBusy'],
+	},
+});
 
 const nodeProperties: INodeProperties[] = [
 	resourceProperty,
@@ -603,7 +584,8 @@ const nodeProperties: INodeProperties[] = [
 		description:
 			'@agentic Optional ETag for optimistic concurrency control. Provide this to avoid overwriting someone else’s changes.',
 	},
-	...sharedRangeFields,
+	...eventDateRangeFields,
+	...queryRangeFields,
 	{
 		displayName: 'Return All',
 		name: 'returnAll',
