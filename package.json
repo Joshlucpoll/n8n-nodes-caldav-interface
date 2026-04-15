@@ -1,6 +1,6 @@
 {
     "name": "n8n-nodes-caldav-interface",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "n8n community nodes for working with CalDAV calendars and events",
     "license": "MIT",
     "homepage": "https://github.com/joshlucpoll/n8n-nodes-caldav-interface#readme",
