@@ -167,48 +167,64 @@ const queryOperationProperty: INodeProperties = {
 	],
 };
 
-const calendarLocatorProperty: INodeProperties = {
-	displayName: 'Calendar',
-	name: 'calendar',
-	type: 'resourceLocator',
-	default: { mode: 'list', value: '' },
-	required: true,
-	description:
-		'@agentic Choose the calendar to work with. You can select one from the server, paste a calendar URL, or enter a collection path such as work or team/project.',
-	displayOptions: {
-		show: {
-			resource: ['calendar', 'event', 'query'],
-			operation: ['get', 'delete', 'create', 'get', 'update', 'delete', 'filter', 'freeBusy'],
-		},
-		hide: {
-			resource: ['calendar'],
-			operation: ['list', 'create'],
-		},
-	},
-	modes: [
-		{
-			displayName: 'From List',
-			name: 'list',
-			type: 'list',
-			typeOptions: {
-				searchListMethod: 'searchCalendars',
-				searchable: true,
+function createCalendarLocatorProperty(
+	displayOptions: INodeProperties['displayOptions'],
+): INodeProperties {
+	return {
+		displayName: 'Calendar',
+		name: 'calendar',
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		description:
+			'@agentic Choose the calendar to work with. You can select one from the server, paste a calendar URL, or enter a collection path such as work or team/project.',
+		displayOptions,
+		modes: [
+			{
+				displayName: 'From List',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'searchCalendars',
+					searchable: true,
+				},
 			},
-		},
-		{
-			displayName: 'Calendar URL',
-			name: 'url',
-			type: 'string',
-			placeholder: 'https://calendar.example.com/calendars/user/work/',
-		},
-		{
-			displayName: 'Collection Path',
-			name: 'id',
-			type: 'string',
-			placeholder: 'work',
-		},
-	],
-};
+			{
+				displayName: 'Calendar URL',
+				name: 'url',
+				type: 'string',
+				placeholder: 'https://calendar.example.com/calendars/user/work/',
+			},
+			{
+				displayName: 'Collection Path',
+				name: 'id',
+				type: 'string',
+				placeholder: 'work',
+			},
+		],
+	};
+}
+
+const calendarLocatorForCalendarOps = createCalendarLocatorProperty({
+	show: {
+		resource: ['calendar'],
+		operation: ['get', 'delete'],
+	},
+});
+
+const calendarLocatorForEventOps = createCalendarLocatorProperty({
+	show: {
+		resource: ['event'],
+		operation: ['create', 'get', 'update', 'delete'],
+	},
+});
+
+const calendarLocatorForQueryOps = createCalendarLocatorProperty({
+	show: {
+		resource: ['query'],
+		operation: ['filter', 'freeBusy'],
+	},
+});
 
 function createRangeFields(displayOptions: INodeProperties['displayOptions']): INodeProperties[] {
 	return [
@@ -314,7 +330,9 @@ const nodeProperties: INodeProperties[] = [
 		},
 		description: '@agentic Optional note describing the calendar purpose, ownership, or expected event type',
 	},
-	calendarLocatorProperty,
+	calendarLocatorForCalendarOps,
+	calendarLocatorForEventOps,
+	calendarLocatorForQueryOps,
 	{
 		displayName: 'Get Mode',
 		name: 'eventGetMode',
@@ -347,8 +365,22 @@ const nodeProperties: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['event'],
-				operation: ['get', 'update', 'delete'],
+				operation: ['get'],
 				eventGetMode: ['single'],
+			},
+		},
+		description:
+			'@agentic Event identifier. You can pass a full event URL, a filename like meeting.ics, or an iCalendar UID.',
+	},
+	{
+		displayName: 'Event Identifier',
+		name: 'eventIdentifier',
+		type: 'string',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['event'],
+				operation: ['update', 'delete'],
 			},
 		},
 		description:
